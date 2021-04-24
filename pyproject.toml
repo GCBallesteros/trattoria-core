@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "trattoria-core"
+version = "0.1.0"
+description = "The heart of the trattoria library. Fast TTTR file processing made easy."
+authors = ["Guillem Ballesters <dev+github@maxwellrules.com>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+numpy = "^1.20.2"
+maturin = "^0.10.3"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
