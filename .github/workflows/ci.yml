@@ -71,7 +71,7 @@ jobs:
           override: true
 
       - name: Build Python package
-        run: maturin develop --release
+        run: poetry run maturin develop --release
 
   python-publish:
     needs: build
@@ -135,5 +135,5 @@ jobs:
       - name: PyPi publish
         env:
           MATURIN_PASSWORD: ${{ secrets.PYPI }}
-        run: maturin publish --username __token__
+        run: poetry run maturin publish --username __token__
 
