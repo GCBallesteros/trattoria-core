@@ -140,6 +140,7 @@ fn trattoria_core(_py: Python, m: &PyModule) -> PyResult<()> {
     fn read_ptu_header<'py>(py: Python<'py>, filepath: &str) -> PyResult<PyObject> {
         let ptu_file = PTUFile::new(PathBuf::from(filepath)).unwrap();
         Ok(ptu_file.header.to_object(py).into())
+        // Error::FileNotAvailable(filename_string)
     }
 
     #[pyfn(m, "timetrace")]
@@ -154,6 +155,10 @@ fn trattoria_core(_py: Python, m: &PyModule) -> PyResult<()> {
 
         let tttr_file = match &file_extension[..] {
             "ptu" => File::PTU(PTUFile::new(filename).unwrap()),
+            // Error::FileNotAvailable(filename_string)
+            // buffered seek
+            // buffer read exact
+            // invalid header
             _ => panic!("Unrecognized file extension"),
         };
         let tt_result = timetrace(&tttr_file, &rparams).unwrap();
