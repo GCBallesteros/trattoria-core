@@ -12,7 +12,7 @@ name = "trattoria_core"
 crate-type = ["cdylib"]
 
 [dependencies]
-tttr-toolbox = "0.2.0"
+tttr-toolbox = "0.2.1"
 numpy = "0.13"
 ndarray = "0.14"
 
