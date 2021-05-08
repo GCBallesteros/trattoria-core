@@ -1,6 +1,6 @@
 [package]
 name = "trattoria-core"
-version = "0.1.0"
+version = "0.2.0"
 authors = ["Guillem Ballesteros <dev+crate@maxwellrules.com>"]
 description = "PyO3 wrapper for TTTR-Toolbox"
 edition = "2018"
