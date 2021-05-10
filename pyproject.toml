@@ -1,13 +1,13 @@
 [tool.poetry]
 name = "trattoria-core"
-version = "0.1.0"
+version = "0.2.1"
 description = "The heart of the trattoria library."
 authors = ["Guillem Ballesteros <dev+github@maxwellrules.com>"]
 license = "MIT"
 
 [tool.poetry.dependencies]
 python = ">=3.6"
-numpy = "^1.19"
+numpy = ">=1.16"
 maturin = "^0.10.3"
 
 [tool.poetry.dev-dependencies]
