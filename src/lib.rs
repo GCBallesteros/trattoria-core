@@ -7,6 +7,7 @@ use tttr_toolbox::headers::File;
 use tttr_toolbox::tttr_tools::timetrace::{timetrace, TimeTraceParams};
 use tttr_toolbox::tttr_tools::g2::{g2, G2Params};
 use tttr_toolbox::tttr_tools::zero_finder::{zerofinder, ZeroFinderParams};
+use tttr_toolbox::tttr_tools::lifetime::{lifetime, LifetimeParams};
 
 use ndarray::arr1;
 use numpy::{IntoPyArray, PyArray1};
@@ -14,6 +15,50 @@ use numpy::{IntoPyArray, PyArray1};
 // todo:
 // error handling
 
+/// Parameters for the lifetime algorithm
+///
+/// Attributes
+/// ----------
+/// channel_sync: int
+///     Sync channel number
+/// channel_source: int
+///     Source channel number
+/// resolution: float
+///     Resolution for the lifetime histogram in seconds
+/// start_record: Optional[int]
+///     First record that should be considered in the analysis
+/// stop_record: Optional[int]
+///     Last record that should be considered in the analysis
+#[pyclass]
+struct LifetimeParameters {
+    #[pyo3(get)]
+    channel_sync: i32,
+    #[pyo3(get)]
+    channel_source: i32,
+    #[pyo3(get)]
+    resolution: f64,
+    #[pyo3(get)]
+    start_record: Option<usize>,
+    #[pyo3(get)]
+    stop_record: Option<usize>,
+}
+
+#[pymethods]
+impl LifetimeParameters {
+    #[new]
+    fn new(
+        channel_sync: i32, channel_source: i32, resolution: f64,
+        start_record: Option<usize>, stop_record: Option<usize>
+    ) -> Self {
+        Self {
+            channel_sync,
+            channel_source,
+            resolution,
+            start_record,
+            stop_record,
+        }
+    }
+}
 
 #[pyclass]
 struct ZeroFinderParameters {
@@ -33,7 +78,7 @@ impl ZeroFinderParameters {
     fn new(
         channel_1: i32, channel_2: i32, correlation_window: f64, resolution: f64
     ) -> Self {
-        ZeroFinderParameters {
+        Self {
             channel_1,
             channel_2,
             correlation_window,
@@ -47,17 +92,17 @@ impl ZeroFinderParameters {
 /// Attributes
 /// ----------
 /// channel_1: int
-///     description
+///     First channel
 /// channel_2: int
-///     description
+///     Second channel
 /// correlation_window: float
-///     description
+///     Size of the correlation window in seconds
 /// resolution: float
-///     description
+///     Resolution of the g2 histogram
 /// start_record: Optional[int]
-///     description
+///     First record that should be considered in the analysis
 /// stop_record: Optional[int]
-///     description
+///     Last record that should be considered in the analysis
 #[pyclass]
 struct G2Parameters {
     #[pyo3(get)]
@@ -97,9 +142,10 @@ impl G2Parameters {
 /// Attributes
 /// ----------
 /// resolution: f64
-///     desc
+///     Resolution of the timetrace. Smaller resolutions allow for higher temporal
+///     detail but also more statistical noise.
 /// channel: Optional[int]
-///     desc
+///     Channel we want to monitor. If None all channels are integrated together.
 #[pyclass]
 struct TimeTraceParameters {
     #[pyo3(get)]
@@ -125,6 +171,7 @@ fn trattoria_core(_py: Python, m: &PyModule) -> PyResult<()> {
     m.add_class::<TimeTraceParameters>()?;
     m.add_class::<G2Parameters>()?;
     m.add_class::<ZeroFinderParameters>()?;
+    m.add_class::<LifetimeParameters>()?;
 
     /// Return a dict with the contents of the header of PicoQuant PTU file.
     ///
@@ -195,6 +242,35 @@ fn trattoria_core(_py: Python, m: &PyModule) -> PyResult<()> {
             (
                 arr1(&g2_res.t[..]).into_pyarray(py),
                 arr1(&g2_res.hist[..]).into_pyarray(py),
+            )
+        )
+    }
+
+    #[pyfn(m, "lifetime")]
+    /// Compute the lifetime histogram.
+    ///
+    /// For details on the algorithm visit the documentation for the tttr-toolbox crate.
+    fn pylifetime<'py>(py: Python<'py>, filepath: &str, params: &LifetimeParameters) -> PyResult<(&'py PyArray1<f64>, &'py PyArray1<u64>)> {
+        let filename = PathBuf::from(filepath);
+        let file_extension = filename.extension().expect("File has no extension").to_str().expect("File has invalid extension");
+        let rparams = LifetimeParams {
+            channel_sync: params.channel_sync,
+            channel_source: params.channel_source,
+            resolution: params.resolution,
+            start_record: params.start_record,
+            stop_record: params.stop_record,
+        };
+
+        let tttr_file = match &file_extension[..] {
+            "ptu" => File::PTU(PTUFile::new(filename).unwrap()),
+            _ => panic!("Unrecognized file extension"),
+        };
+        let lifetime_res = lifetime(&tttr_file, &rparams).unwrap();
+
+        Ok(
+            (
+                arr1(&lifetime_res.t[..]).into_pyarray(py),
+                arr1(&lifetime_res.hist[..]).into_pyarray(py),
             )
         )
     }
