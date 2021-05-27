@@ -351,7 +351,7 @@ fn trattoria_core(_py: Python, m: &PyModule) -> PyResult<()> {
             // buffered seek
             // buffer read exact
             // invalid header
-            _ => {return Err(PyTypeError::new_err("TrattoriaError"))},
+            _ => return Err(PyTypeError::new_err("TrattoriaError")),
         };
         let tt_result =
             timetrace(&tttr_file, &rparams).map_err(|_| PyTypeError::new_err("TrattoriaError"))?;
@@ -390,7 +390,7 @@ fn trattoria_core(_py: Python, m: &PyModule) -> PyResult<()> {
             "ptu" => File::PTU(
                 PTUFile::new(filename).map_err(|_| PyTypeError::new_err("TrattoriaError"))?,
             ),
-            _ => {return Err(PyTypeError::new_err("TrattoriaError"))},
+            _ => return Err(PyTypeError::new_err("TrattoriaError")),
         };
         let g2_res =
             g2(&tttr_file, &rparams).map_err(|_| PyTypeError::new_err("TrattoriaError"))?;
@@ -430,7 +430,7 @@ fn trattoria_core(_py: Python, m: &PyModule) -> PyResult<()> {
             "ptu" => File::PTU(
                 PTUFile::new(filename).map_err(|_| PyTypeError::new_err("TrattoriaError"))?,
             ),
-            _ => {return Err(PyTypeError::new_err("TrattoriaError"))},
+            _ => return Err(PyTypeError::new_err("TrattoriaError")),
         };
         let g3_res =
             g3(&tttr_file, &rparams).map_err(|_| PyTypeError::new_err("TrattoriaError"))?;
@@ -473,9 +473,10 @@ fn trattoria_core(_py: Python, m: &PyModule) -> PyResult<()> {
             "ptu" => File::PTU(
                 PTUFile::new(filename).map_err(|_| PyTypeError::new_err("TrattoriaError"))?,
             ),
-            _ => {return Err(PyTypeError::new_err("TrattoriaError"))},
+            _ => return Err(PyTypeError::new_err("TrattoriaError")),
         };
-        let g3_res = g3_sync(&tttr_file, &rparams).map_err(|_| PyTypeError::new_err("TrattoriaError"))?;
+        let g3_res =
+            g3_sync(&tttr_file, &rparams).map_err(|_| PyTypeError::new_err("TrattoriaError"))?;
 
         Ok((
             arr1(&g3_res.t[..]).into_pyarray(py),
@@ -510,9 +511,10 @@ fn trattoria_core(_py: Python, m: &PyModule) -> PyResult<()> {
             "ptu" => File::PTU(
                 PTUFile::new(filename).map_err(|_| PyTypeError::new_err("TrattoriaError"))?,
             ),
-            _ => {return Err(PyTypeError::new_err("TrattoriaError"))},
+            _ => return Err(PyTypeError::new_err("TrattoriaError")),
         };
-        let lifetime_res = lifetime(&tttr_file, &rparams).map_err(|_| PyTypeError::new_err("TrattoriaError"))?;
+        let lifetime_res =
+            lifetime(&tttr_file, &rparams).map_err(|_| PyTypeError::new_err("TrattoriaError"))?;
 
         Ok((
             arr1(&lifetime_res.t[..]).into_pyarray(py),
@@ -543,9 +545,10 @@ fn trattoria_core(_py: Python, m: &PyModule) -> PyResult<()> {
             "ptu" => File::PTU(
                 PTUFile::new(filename).map_err(|_| PyTypeError::new_err("TrattoriaError"))?,
             ),
-            _ => {return Err(PyTypeError::new_err("TrattoriaError"))},
+            _ => return Err(PyTypeError::new_err("TrattoriaError")),
         };
-        let zf_res = zerofinder(&tttr_file, &rparams).map_err(|_| PyTypeError::new_err("TrattoriaError"))?;
+        let zf_res =
+            zerofinder(&tttr_file, &rparams).map_err(|_| PyTypeError::new_err("TrattoriaError"))?;
 
         Ok((
             arr1(&zf_res.t[..]).into_pyarray(py),
