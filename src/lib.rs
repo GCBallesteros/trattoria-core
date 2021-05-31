@@ -404,6 +404,11 @@ fn trattoria_core(_py: Python, m: &PyModule) -> PyResult<()> {
     #[pyfn(m, "g3")]
     /// Returns the third order autocorrelation between three channels in the TCSPC
     ///
+    /// ## Returns
+    /// The matrix with the g3 correlation grows towards the right and downwards. For
+    /// a more typical view (delays growing up and to the right) you will need to do a
+    /// numpy.flipud on the matrix.
+    ///
     /// For details on the algorithm visit the documentation for the tttr-toolbox crate.
     fn pyg3<'py>(
         py: Python<'py>,
@@ -448,6 +453,12 @@ fn trattoria_core(_py: Python, m: &PyModule) -> PyResult<()> {
     #[pyfn(m, "g3sync")]
     /// Returns the third order autocorrelation between three channels in the TCSPC
     ///
+    /// ## Returns
+    /// The matrix with the g3 correlation grows towards the right and downwards. For
+    /// a more typical view (delays growing up and to the right) you will need to do a
+    /// numpy.flipud on the matrix.
+    ///
+    /// ## More information
     /// For details on the algorithm visit the documentation for the tttr-toolbox crate.
     fn pyg3sync<'py>(
         py: Python<'py>,
