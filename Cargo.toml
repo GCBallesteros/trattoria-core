@@ -13,8 +13,8 @@ crate-type = ["cdylib"]
 
 [dependencies]
 tttr-toolbox = "0.4.2"
-numpy = "0.13"
-ndarray = "0.14"
+numpy = "0.13.2"
+ndarray = "0.15.2"
 
 [profile.release]
 lto="fat"
