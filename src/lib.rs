@@ -104,13 +104,16 @@ impl ZeroFinderParameters {
 /// channel_2: int
 ///     Second channel
 /// correlation_window: float
-///     Size of the correlation window in seconds
+///     Size of the correlation window in seconds.
 /// resolution: float
-///     Resolution of the g2 histogram
-/// start_record: Optional[int]
-///     First record that should be considered in the analysis
-/// stop_record: Optional[int]
-///     Last record that should be considered in the analysis
+///     Resolution of the g2 histogram.
+/// record_ranges: Optional[List[Tuple[int, int]]]
+///     List of record ranges (as tuples) that should be considered when calculatin
+///     g2.
+///
+/// Example
+/// -------
+/// params = G2Parameters(0, 1, 10e-9, 64e-12, [(0, 10000)])
 #[pyclass]
 struct G2Parameters {
     #[pyo3(get)]
@@ -122,9 +125,7 @@ struct G2Parameters {
     #[pyo3(get)]
     resolution: f64,
     #[pyo3(get)]
-    start_record: Option<usize>,
-    #[pyo3(get)]
-    stop_record: Option<usize>,
+    record_ranges: Option<Vec<(usize, usize)>>,
 }
 
 #[pymethods]
@@ -135,16 +136,14 @@ impl G2Parameters {
         channel_2: i32,
         correlation_window: f64,
         resolution: f64,
-        start_record: Option<usize>,
-        stop_record: Option<usize>,
+        record_ranges: Option<Vec<(usize, usize)>>,
     ) -> Self {
         G2Parameters {
             channel_1,
             channel_2,
             correlation_window,
             resolution,
-            start_record,
-            stop_record,
+            record_ranges,
         }
     }
 }
@@ -382,8 +381,7 @@ fn trattoria_core(_py: Python, m: &PyModule) -> PyResult<()> {
             channel_2: params.channel_2,
             correlation_window: params.correlation_window,
             resolution: params.resolution,
-            start_record: params.start_record,
-            stop_record: params.stop_record,
+            record_ranges: params.record_ranges.clone(),
         };
 
         let tttr_file = match &file_extension[..] {

@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "trattoria-core"
-version = "0.4.0"
+version = "0.4.2"
 description = "The heart of the trattoria library."
 authors = ["Guillem Ballesteros <dev+github@maxwellrules.com>"]
 license = "MIT"
