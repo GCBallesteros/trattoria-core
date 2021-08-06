@@ -4,7 +4,7 @@ use pyo3::prelude::*;
 
 use tttr_toolbox::headers::File;
 use tttr_toolbox::parsers::ptu::PTUFile;
-use tttr_toolbox::tttr_tools::g2::{g2, G2Params};
+use tttr_toolbox::tttr_tools::g2::{g2, G2Mode, G2Params};
 use tttr_toolbox::tttr_tools::g3::{g3, G3Params};
 use tttr_toolbox::tttr_tools::lifetime::{lifetime, LifetimeParams};
 use tttr_toolbox::tttr_tools::synced_g3::{g3_sync, G3SyncParams};
@@ -369,7 +369,18 @@ fn trattoria_core(_py: Python, m: &PyModule) -> PyResult<()> {
         py: Python<'py>,
         filepath: &str,
         params: &G2Parameters,
+        mode: String,
     ) -> PyResult<(&'py PyArray1<f64>, &'py PyArray1<u64>)> {
+        let mode = match &mode[..] {
+            "symmetric" => G2Mode::Symmetric,
+            "asymmetric" => G2Mode::Asymmetric,
+            _ => {
+                return Err(PyTypeError::new_err(
+                    "TrattoriaError('Invalid mode. Options are symmetric or asymmetric')",
+                ))
+            }
+        };
+
         let filename = PathBuf::from(filepath);
         let file_extension = filename
             .extension()
@@ -391,7 +402,7 @@ fn trattoria_core(_py: Python, m: &PyModule) -> PyResult<()> {
             _ => return Err(PyTypeError::new_err("TrattoriaError")),
         };
         let g2_res =
-            g2(&tttr_file, &rparams).map_err(|_| PyTypeError::new_err("TrattoriaError"))?;
+            g2(&tttr_file, &rparams, mode).map_err(|_| PyTypeError::new_err("TrattoriaError"))?;
 
         Ok((
             arr1(&g2_res.t[..]).into_pyarray(py),
