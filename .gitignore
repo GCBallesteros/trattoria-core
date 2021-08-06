@@ -1,2 +1,5 @@
 /target
+/.ipynb_checkpoints
+*.ipynb
+*.py
 Cargo.lock
