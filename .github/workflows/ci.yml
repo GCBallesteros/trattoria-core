@@ -30,22 +30,34 @@ jobs:
           override: true
 
       - name: Build
+        uses: PyO3/maturin-action@v1
+        with:
+          command: build
+          args: --release  --strip --interpreter python${{matrix.python_version}} --out dist
+
+      - name: Install wheels
+        run: pip install --no-index --find-links dist --force-reinstall
+
+      -name: Upload wheels
+       uses: actions/upload-artifact@v3
+       with:
+         name: wheels
+         path: dist
+
+  release:
+    name: Release
+    needs: [python-publish]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get build artifacts
+        uses: actions/download-artifacts@v3
+        with:
+          name: wheels
+      - name: Publish to PyPI
         env:
           MATURIN_PASSWORD: ${{ secrets.PYPI }}
         uses: PyO3/maturin-action@v1
         with:
-          command: publish
-          args: --username ${{ secrets.PYPY_USER}}  --manylinux 2014 --profile release
+          command: upload
+          args: --skip-existing --usertname ${{ secrets.PYPY_USER}}
 
-      # - name: List wheels
-      #   run: ls target/wheels/
-      #
-      # - name: Get poetry
-      #   run: |
-      #     pip install poetry
-      #     poetry install
-
-      # - name: PyPi publish
-      #   env:
-      #     MATURIN_PASSWORD: ${{ secrets.PYPI }}
-      #   run: poetry run maturin publish --username ${{ secrets.PYPY_USER}} --interpreter python${{matrix.python_version}} --manylinux 2014
