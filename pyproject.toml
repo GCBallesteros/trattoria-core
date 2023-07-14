@@ -8,10 +8,14 @@ license = "MIT"
 [tool.poetry.dependencies]
 python = ">=3.8,<3.12"
 numpy = ">=1.20"
-maturin = "^0.10.3"
+maturin = "^1"
 
 [tool.poetry.dev-dependencies]
 
 [build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["maturin>=1.0,<2.0"]
+build-backend = "maturin"
+
+[package.metadata.maturin]
+requires-dist = ["numpy>=1.20"]
+classifier = ["Programming Language :: Python", "Topic :: Scientific/Engineering", "Topic :: Scientific/Engineering :: Physics"]

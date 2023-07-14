@@ -26,7 +26,3 @@ incremental = false
 [dependencies.pyo3]
 version = "0.13.2"
 features = ["extension-module"]
-
-[package.metadata.maturin]
-requires-dist = ["numpy>=1.16"]
-classifier = ["Programming Language :: Python", "Topic :: Scientific/Engineering", "Topic :: Scientific/Engineering :: Physics"]
