@@ -9,7 +9,8 @@ on:
         default: 'warning'
 
 jobs:
-  python-publish:
+  build-wheels:
+    name: Build Wheels
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -43,7 +44,7 @@ jobs:
 
   release:
     name: Release
-    needs: [python-publish]
+    needs: [build-wheels]
     runs-on: ubuntu-latest
     steps:
       - name: Get build artifacts
@@ -56,5 +57,5 @@ jobs:
         uses: PyO3/maturin-action@v1
         with:
           command: upload
-          args: --skip-existing --usertname ${{ secrets.PYPY_USER}}
+          args: --skip-existing --username ${{ secrets.PYPY_USER}}
 
