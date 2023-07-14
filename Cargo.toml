@@ -1,6 +1,6 @@
 [package]
 name = "trattoria-core"
-version = "0.4.4"
+version = "0.4.5"
 authors = ["Guillem Ballesteros <dev+crate@maxwellrules.com>"]
 description = "PyO3 wrapper for TTTR-Toolbox"
 edition = "2018"
@@ -13,8 +13,9 @@ crate-type = ["cdylib"]
 
 [dependencies]
 tttr-toolbox = "0.4.4"
-#tttr-toolbox = { path = "../tttr-toolbox/tttr-toolbox" }
-numpy = "0.13.2"
+# tttr-toolbox = { path = "../tttr-toolbox/tttr-toolbox" }
+numpy = "0.19"
+pyo3 = { version = "0.19", features = ["extension-module"]}
 ndarray = "0.15.2"
 
 [profile.release]
@@ -22,7 +23,3 @@ lto="fat"
 codegen-units = 1
 debug = false
 incremental = false
-
-[dependencies.pyo3]
-version = "0.13.2"
-features = ["extension-module"]
