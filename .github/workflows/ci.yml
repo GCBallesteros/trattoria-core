@@ -35,7 +35,7 @@ jobs:
         uses: PyO3/maturin-action@v1
         with:
           command: publish
-          args: --username ${{ secrets.PYPY_USER}} --interpreter python${{matrix.python_version}} --manylinux 2014 --profile release
+          args: --username ${{ secrets.PYPY_USER}}  --manylinux 2014 --profile release
 
       # - name: List wheels
       #   run: ls target/wheels/
