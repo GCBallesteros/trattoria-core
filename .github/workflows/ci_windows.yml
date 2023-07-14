@@ -51,6 +51,6 @@ jobs:
 
       - name: PyPi publish
         env:
-          MATURIN_PYPI_TOKEN: ${{ secrets.PYPI }}
-        run: poetry run maturin publish --username __token__ --interpreter python${{matrix.python_version}}
+          MATURIN_PASSWORD: ${{ secrets.PYPI }}
+        run: poetry run maturin publish --username ${{ secrets.PYPY_USER}} --interpreter python${{matrix.python_version}}
 
