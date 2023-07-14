@@ -35,8 +35,13 @@ jobs:
           command: build
           args: --release  --strip --interpreter python${{matrix.python_version}}
 
-      - name: Install wheels
-        run: pip install target/wheels/trattoria_core*.whl
+      - name: List wheels
+        run: ls target/wheels/
+
+      - name: Get poetry
+        run: |
+          pip install poetry
+          poetry install
 
       - name: PyPi publish
         env:
