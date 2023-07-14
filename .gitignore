@@ -3,3 +3,4 @@
 *.ipynb
 *.py
 Cargo.lock
+poetry.lock
