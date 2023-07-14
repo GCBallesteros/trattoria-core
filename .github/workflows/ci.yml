@@ -54,8 +54,9 @@ jobs:
       - name: Publish to PyPI
         env:
           MATURIN_PASSWORD: ${{ secrets.PYPI }}
+          MATURIN_USERNAME: ${{ secrets.PYPY_USER}}
         uses: PyO3/maturin-action@v1
         with:
           command: upload
-          args: --skip-existing --username ${{ secrets.PYPY_USER}}
+          args: --skip-existing
 
