@@ -1,4 +1,4 @@
-name: WindowsBuildAndPublish
+name: Windows_BuildAndPublish
 
 on: 
   workflow_dispatch:

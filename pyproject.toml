@@ -1,21 +1,22 @@
-[tool.poetry]
+[project]
 name = "trattoria-core"
-version = "0.4.4"
+version = "0.4.6"
 description = "The heart of the trattoria library."
-authors = ["Guillem Ballesteros <dev+github@maxwellrules.com>"]
+authors = [{email = "dev+github@maxwellrules.com", name = "Guillem Ballesteros"}]
 license = "MIT"
-
-[tool.poetry.dependencies]
-python = ">=3.8,<3.12"
-numpy = ">=1.20"
-maturin = "^1"
-
-[tool.poetry.dev-dependencies]
+requires-python = ">=3.8,<3.12"
+dependencies = ["numpy>=1.20"]
 
 [build-system]
 requires = ["maturin>=1.0,<2.0"]
 build-backend = "maturin"
 
+[tool.maturin]
+features = ["pyo3/extension-module"]
+include = [{ path = "./**/*", format = "sdist" }]
+
+[project.urls]
+homepage = "https://www.github.com/GCBallesteros/trattoria-core"
+
 [package.metadata.maturin]
-requires-dist = ["numpy>=1.20"]
 classifier = ["Programming Language :: Python", "Topic :: Scientific/Engineering", "Topic :: Scientific/Engineering :: Physics"]
