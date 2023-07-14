@@ -36,7 +36,7 @@ jobs:
           poetry install
 
       - name: Build Python package
-        run: poetry run maturin build --release --no-sdist --strip --interpreter python${{matrix.python_version}}
+        run: poetry run maturin build --release --no-sdist --strip --interpreter python${{matrix.python_version}} --manylinux 2014
 
       - name: Install wheels
         run: pip install target/wheels/trattoria_core*.whl
@@ -44,5 +44,5 @@ jobs:
       - name: PyPi publish
         env:
           MATURIN_PASSWORD: ${{ secrets.PYPI }}
-        run: poetry run maturin publish --username ${{ secrets.PYPY_USER}} --interpreter python${{matrix.python_version}}
+        run: poetry run maturin publish --username ${{ secrets.PYPY_USER}} --interpreter python${{matrix.python_version}} --manylinux 2014
 
