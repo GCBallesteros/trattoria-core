@@ -35,9 +35,6 @@ jobs:
           command: build
           args: --release  --strip --interpreter python${{matrix.python_version}} --out dist
 
-      - name: Install wheels
-        run: pip install --no-index --find-links dist --force-reinstall
-
       - name: Upload wheels
         uses: actions/upload-artifact@v3
         with:
