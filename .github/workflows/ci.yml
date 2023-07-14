@@ -33,7 +33,7 @@ jobs:
         uses: PyO3/maturin-action@v1
         with:
           command: build
-          args: --release  --no-sdist --strip --interpreter python${{matrix.python_version}}
+          args: --release  --strip --interpreter python${{matrix.python_version}}
 
       - name: Install wheels
         run: pip install target/wheels/trattoria_core*.whl
