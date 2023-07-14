@@ -53,4 +53,3 @@ jobs:
         env:
           MATURIN_PASSWORD: ${{ secrets.PYPI }}
         run: poetry run maturin publish --username ${{ secrets.PYPY_USER}} --interpreter python${{matrix.python_version}}
-

@@ -30,21 +30,22 @@ jobs:
           override: true
 
       - name: Build
-        uses: PyO3/maturin-action@v1
-        with:
-          command: build
-          args: --release  --strip --interpreter python${{matrix.python_version}}
-
-      - name: List wheels
-        run: ls target/wheels/
-
-      - name: Get poetry
-        run: |
-          pip install poetry
-          poetry install
-
-      - name: PyPi publish
         env:
           MATURIN_PASSWORD: ${{ secrets.PYPI }}
-        run: poetry run maturin publish --username ${{ secrets.PYPY_USER}} --interpreter python${{matrix.python_version}} --manylinux 2014
+        uses: PyO3/maturin-action@v1
+        with:
+          command: publish
+          args: --username ${{ secrets.PYPY_USER}} --interpreter python${{matrix.python_version}} --manylinux 2014 --profile release
 
+      # - name: List wheels
+      #   run: ls target/wheels/
+      #
+      # - name: Get poetry
+      #   run: |
+      #     pip install poetry
+      #     poetry install
+
+      # - name: PyPi publish
+      #   env:
+      #     MATURIN_PASSWORD: ${{ secrets.PYPI }}
+      #   run: poetry run maturin publish --username ${{ secrets.PYPY_USER}} --interpreter python${{matrix.python_version}} --manylinux 2014
