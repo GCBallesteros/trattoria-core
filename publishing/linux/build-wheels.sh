@@ -12,8 +12,6 @@ function repair_wheel {
 
 git clone https://github.com/GCBallesteros/trattoria-core
 cd trattoria-core
-git checkout fix_build
-
 
 /opt/python/cp39-cp39/bin/maturin build -i python3.8 --release --sdist --strip --out dist
 /opt/python/cp39-cp39/bin/maturin build -i python3.9 --release --sdist --strip --out dist
