@@ -9,7 +9,7 @@ on:
         default: 'warning'
 
 jobs:
-  python-publish:
+  build-wheels:
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
