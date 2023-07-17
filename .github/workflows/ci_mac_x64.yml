@@ -1,4 +1,4 @@
-name: UNIXBuildAndPublish
+name: Macx64_BuildAndPublish
 
 on: 
   workflow_dispatch:
@@ -9,13 +9,14 @@ on:
         default: 'warning'
 
 jobs:
-  python-publish:
+  build-wheels:
+    name: Build Wheels
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
         python-version: ["3.8", "3.9", "3.10", "3.11"]
-        os: [ubuntu-latest, macos-latest]
+        os: [macos-latest]
     steps:
       - uses: actions/checkout@v1
 
@@ -33,10 +34,7 @@ jobs:
         uses: PyO3/maturin-action@v1
         with:
           command: build
-          args: --release  --strip --interpreter python${{matrix.python_version}} --out dist
-
-      - name: Install wheels
-        run: pip install --no-index --find-links dist --force-reinstall
+          args: --release --sdist --strip -i python${{matrix.python_version}} --out dist
 
       - name: Upload wheels
         uses: actions/upload-artifact@v3
@@ -46,18 +44,18 @@ jobs:
 
   release:
     name: Release
-    needs: [python-publish]
+    needs: [build-wheels]
     runs-on: ubuntu-latest
     steps:
       - name: Get build artifacts
-        uses: actions/download-artifacts@v3
+        uses: actions/download-artifact@v3
         with:
           name: wheels
       - name: Publish to PyPI
         env:
           MATURIN_PASSWORD: ${{ secrets.PYPI }}
+          MATURIN_USERNAME: ${{ secrets.PYPY_USER}}
         uses: PyO3/maturin-action@v1
         with:
           command: upload
-          args: --skip-existing --usertname ${{ secrets.PYPY_USER}}
-
+          args: --skip-existing *

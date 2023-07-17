@@ -1,3 +1,4 @@
+use pyo3::conversion::ToPyObject;
 use std::path::PathBuf;
 
 use pyo3::prelude::*;
@@ -314,14 +315,17 @@ fn trattoria_core(_py: Python, m: &PyModule) -> PyResult<()> {
     /// Returns
     /// -------
     /// Dict[str, Tuple[Any, str]]
-    #[pyfn(m, "read_ptu_header")]
-    fn read_ptu_header<'py>(py: Python<'py>, filepath: &str) -> PyResult<PyObject> {
+    #[pyfunction]
+    #[pyo3(name = "read_ptu_header")]
+    fn pyread_ptu_header<'py>(py: Python<'py>, filepath: &str) -> PyResult<PyObject> {
         let ptu_file = PTUFile::new(PathBuf::from(filepath))
             .map_err(|_| PyTypeError::new_err("TrattoriaError"))?;
         Ok(ptu_file.header.to_object(py).into())
     }
+    m.add_function(wrap_pyfunction!(pyread_ptu_header, m)?)?;
 
-    #[pyfn(m, "timetrace")]
+    #[pyfunction]
+    #[pyo3(name = "timetrace")]
     /// Returns the intensity time trace and record number time trace for a TTTR file.
     ///
     /// For details on the algorithm visit the documentation for the tttr-toolbox
@@ -360,8 +364,10 @@ fn trattoria_core(_py: Python, m: &PyModule) -> PyResult<()> {
             arr1(&tt_result.recnum_trace[..]).into_pyarray(py),
         ))
     }
+    m.add_function(wrap_pyfunction!(pytimetrace, m)?)?;
 
-    #[pyfn(m, "g2")]
+    #[pyfunction]
+    #[pyo3(name = "g2")]
     /// Returns the second order autocorrelation between two channels in the TCSPC
     ///
     /// For details on the algorithm visit the documentation for the tttr-toolbox crate.
@@ -409,8 +415,10 @@ fn trattoria_core(_py: Python, m: &PyModule) -> PyResult<()> {
             arr1(&g2_res.hist[..]).into_pyarray(py),
         ))
     }
+    m.add_function(wrap_pyfunction!(pyg2, m)?)?;
 
-    #[pyfn(m, "g3")]
+    #[pyfunction]
+    #[pyo3(name = "g3")]
     /// Returns the third order autocorrelation between three channels in the TCSPC
     ///
     /// ## Returns
@@ -458,8 +466,10 @@ fn trattoria_core(_py: Python, m: &PyModule) -> PyResult<()> {
             //arr2(&g3_res.hist[..;..]).into_pyarray(py),
         ))
     }
+    m.add_function(wrap_pyfunction!(pyg3, m)?)?;
 
-    #[pyfn(m, "g3sync")]
+    #[pyfunction]
+    #[pyo3(name = "g3sync")]
     /// Returns the third order autocorrelation between three channels in the TCSPC
     ///
     /// ## Returns
@@ -503,8 +513,10 @@ fn trattoria_core(_py: Python, m: &PyModule) -> PyResult<()> {
             arr1(&g3_res.hist.as_slice().unwrap()).into_pyarray(py),
         ))
     }
+    m.add_function(wrap_pyfunction!(pyg3sync, m)?)?;
 
-    #[pyfn(m, "lifetime")]
+    #[pyfunction]
+    #[pyo3(name = "lifetime")]
     /// Compute the lifetime histogram.
     ///
     /// For details on the algorithm visit the documentation for the tttr-toolbox crate.
@@ -541,8 +553,10 @@ fn trattoria_core(_py: Python, m: &PyModule) -> PyResult<()> {
             arr1(&lifetime_res.hist[..]).into_pyarray(py),
         ))
     }
+    m.add_function(wrap_pyfunction!(pylifetime, m)?)?;
 
-    #[pyfn(m, "zerofinder")]
+    #[pyfunction]
+    #[pyo3(name = "zerofinder")]
     fn pyzerofinder<'py>(
         py: Python<'py>,
         filepath: &str,
@@ -575,6 +589,7 @@ fn trattoria_core(_py: Python, m: &PyModule) -> PyResult<()> {
             arr1(&zf_res.hist[..]).into_pyarray(py),
         ))
     }
+    m.add_function(wrap_pyfunction!(pyzerofinder, m)?)?;
 
     Ok(())
 }

@@ -1,5 +1,8 @@
 /target
 /.ipynb_checkpoints
+/dist
+/sample_data
+.DS_Store
 *.ipynb
 *.py
 Cargo.lock

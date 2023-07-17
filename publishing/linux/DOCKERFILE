@@ -1,0 +1,10 @@
+FROM quay.io/pypa/manylinux2014_x86_64
+
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | bash -s -- -y
+
+RUN echo 'source $HOME/.cargo/env' >> $HOME/.bashrc
+
+RUN /opt/python/cp39-cp39/bin/pip install maturin
+
+COPY build-wheels.sh /root
+COPY publish.sh /root
