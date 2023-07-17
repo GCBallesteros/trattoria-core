@@ -38,7 +38,7 @@ jobs:
           pip install poetry
 
       - name: Build Python package
-        run: poetry run maturin build --release --no-sdist --strip --interpreter python${{matrix.python_version}}
+        run: poetry run maturin build --release --sdist --strip --interpreter python${{matrix.python_version}}
 
       - name: List wheels
         run: ls target/wheels/
